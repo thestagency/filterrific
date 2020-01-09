@@ -19,6 +19,7 @@ if (typeof Filterrific === 'undefined') {
 
 // Define function to submit Filterrific filter form
 Filterrific.submitFilterForm = function(){
+  var request = null;
   var form = $(this).parents("form"),
       url = form.attr("action");
   // turn on spinner
@@ -29,6 +30,12 @@ Filterrific.submitFilterForm = function(){
     data: form.serialize(),
     type: 'GET',
     dataType: 'script'
+  }).beforeSend(function () {
+    if (request !== null) {
+      request.abort();
+      request = null;
+      console.log("filterrific - Previous request detected, canceling")
+    }
   }).done(function( msg ) {
     $('.filterrific_spinner').hide();
   });
